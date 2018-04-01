@@ -1,0 +1,7 @@
+login
+	traffic policeman
+		user id - badge no. (6 digits)
+		pass - (can changes) (6 digit pin)
+	offender
+		user id - challan id (10 digits)
+		pass - license no. (6 digit pin)
