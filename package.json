@@ -18,6 +18,8 @@
   "homepage": "https://github.com/AkashG6/E-challan-website#readme",
   "dependencies": {
     "express": "^4.16.3",
+    "mongodb": "^3.0.5",
+    "mongoose": "^5.0.12",
     "socket.io": "^2.0.4"
   }
 }
