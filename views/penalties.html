@@ -17,6 +17,8 @@
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+       
 
           <style>
             #customers {
@@ -55,9 +57,9 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto  justify-content-end">
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="pay.html">Pay</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link" href="penalties.html">Penalties</a>
                     </li>
@@ -73,8 +75,55 @@
 
 </head>
 <body>
+<center>  
+    <br><br>
+    <h3>Penalties</h3>
+    <br>
+    <table border="1px" id="penalties"></table>
+</center>
+
+<script type="text/javascript">
+       $.ajax({
+            url: 'show_penalties.php',
+            type: 'GET',
+            error: (function(data){
+                console.log(data);
+                }),
+            success: (function(data){
+                console.log(data);
+                })
+        }).done(function(response){
+            console.log("in done")
+            var data = JSON.parse(response);
+            console.log(data.length)
+
+            $('#penalties').empty();
+            $('#penalties').append(
+                '<tr>'+
+                    '<th>Sr. No.</th>'+
+                    '<th>Penalty</th>'+
+                    '<th>Fine</th>'+
+                    '<th>Sentence</th>'+
+                '</tr>'
+            );
+            for(i=0;i<data.length;i++){
+                $('#penalties').append(
+                    '<tr>'+
+                        '<td>'+(i+1)+'</td>'+
+                        '<td>'+data[i].penalty+'</td>'+
+                        '<td>'+data[i].fine+'</td>'+
+                        '<td>'+data[i].sentence+'</td>'+
+                    '</tr>'
+                );
+            }
+        });    
 
 
+</script>
+
+
+
+<!-- 
     <br>
     <table id="customers";>
     <tr>
@@ -197,8 +246,7 @@
     177 Motor Vehicle Act 
     </td>
     </tr>
-    </table>
-
+    </table> -->
 
 
 </body>
