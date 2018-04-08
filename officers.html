@@ -17,6 +17,7 @@
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -80,70 +81,108 @@
             </div>
             </div>
         </nav>
-    
+<center>
+    <br><br>
 <div class="center">
     
-<div class="col-md-4 border rounded border-primary text-left login-form">
-                <form>
-                        <label for="name">Name of police officer</label>
-                        <input type="text" class="form-control" placeholder="Enter name">
-                        <br>
+<div class="col-md-5 border rounded border-primary text-left login-form">
+        <form >
+                <label for="name">Name of police officer</label>
+                <input type="text" id="name" class="form-control" placeholder="Enter name">
+                <br>
 
-                         <label for="id">User ID</label>
-                        <input type="" class="form-control" placeholder="Enter user ID">
-                        <br>
+                 <label for="id">User ID</label>
+                <input type="" id="user_id" class="form-control" placeholder="Enter user ID">
+                <br>
 
-                         <label for="exampleInputEmail1">Division assigned</label>
-                        <input type="text" class="form-control" placeholder="Enter Division">
-                        <br>
+                 <label for="exampleInputEmail1">Division assigned</label>
+                <input type="text" id="division" class="form-control" placeholder="Enter Division">
+                <br>
 
-                        <label for="ID">Aadhar no of the offender</label>
-                        <input type="text" class="form-control" placeholder="Enter Aadhar no">
-                        <br>
+                <label for="ID">Aadhar no of the offender</label>
+                <input type="text" class="form-control" placeholder="Enter Aadhar no" required="">
+                <br>
 
-                        <label for="name">Offence committed</label>
-                        <br>
-                        <select name="cars">
-                        <option value="license">No valid license</option>
-                        <option value="minor">Driving by minor</option>
-                        <option value="reversing">Reversing without caution and care</option>
-                        <option value="permit">No valid permit</option>
-                      </select>
-                        
-                        <br>
-                        <br>
+                <label for="ID">Contact no of the offender</label>
+                <input type="text" class="form-control" placeholder="Enter Contact no" required="">
+                <br>
 
-                        <label for="exampleInputEmail1">License Number of vehicle</label>
-                        <input type="" class="form-control" " placeholder="License Number">
-                        <br>
+                <label for="name">Offence committed</label>
+                <br>
+                <select id="select">
+               
+                 </select>
+                
+                <br>
+                <br>
 
-                        <label for="exampleInputEmail1">Vehicle Number of vehicle</label>
-                        <input type="" class="form-control" " placeholder="Vehicle Number">
-                        <br>
+                <label for="exampleInputEmail1">License Number of vehicle</label>
+                <input type="" class="form-control" " placeholder="License Number">
+                <br>
 
-                         <label for="name">Where was the offence comiited</label>
-                        <input type="text" class="form-control" placeholder="Enter location">
-                        <br>
+                <label for="exampleInputEmail1">Vehicle Number of vehicle</label>
+                <input type="" class="form-control" " placeholder="Vehicle Number">
+                <br>
 
-                        <label for="exampleInputEmail1">Fine charged</label>
-                        <input type="" class="form-control" " placeholder="Enter amount">
-                        <br>
+                 <label for="name">Where was the offence comiited</label>
+                <input type="text" class="form-control" placeholder="Enter location">
+                <br>
 
-                       
+                <label for="exampleInputEmail1">Fine charged</label>
+                <input type="" class="form-control" " placeholder="Enter amount">
+                <br>
 
-                    <!-- <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Remember mea</label>
-                    </div> -->
-
-
-                    <button type="submit" class="button">Submit</button>
-                </form>
-            </div>
+            <button type="submit" class="button">Submit</button>
+        </form>
+    </div>
 </div>
 
+</center>    
+
+<script type="text/javascript">
+    var user = localStorage.getItem('user')
+       $.ajax({
+            url: 'auto_fill.php',
+            type: 'POST',
+            data: { user: user },
+            error: (function(data){
+                console.log(data);
+                }),
+            success: (function(data){
+                })
+        }).done(function(response){
+            console.log("in auto_fill done")
+            var data = JSON.parse(response);
+            console.log(data)
+
+            $('#name').val(data[0].name);
+            $('#user_id').val(data[0].user_id);
+            $('#division').val(data[0].division);
 
 
+        });    
+
+
+    $.ajax({
+            url: 'views/show_penalties.php',
+            type: 'GET',
+            error: (function(data){
+                console.log(data);
+                }),
+            success: (function(data){
+                console.log(data);
+                })
+        }).done(function(response){
+            console.log("in done")
+            var data = JSON.parse(response);
+            console.log(data.length)
+
+            for(i=0;i<data.length;i++){
+                $('#select').append('<option value="license">'+data[i].penalty+'</option>')
+            }
+        });  
+
+</script>
 
 
 

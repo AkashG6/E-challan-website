@@ -91,7 +91,7 @@
                         <small id="emailHelp" class="form-text text-muted">Your Password is your contact no.</small>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="submit" onclick="set()" class="btn btn-primary">Login</button>
                 </form>
             </div>
         </center>
@@ -100,5 +100,12 @@
 
 
 </body>
-
+<script type="text/javascript">
+    function set()
+    {
+        var user = $("#username").val();
+        console.log(user);
+        localStorage.setItem('user',user)
+    }
+</script>
 </html>
