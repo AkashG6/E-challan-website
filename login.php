@@ -1,20 +1,37 @@
+<?php
 
-ju<?php
+$DB_HOST = 'localhost';
+$DB_NAME = 'dd';
+$DB_USER = 'root';
+$DB_PASS = '';
 
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'dd');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+$username = $_POST['username'];
+$password = $_POST['password'];
 
-$con = mysqli_connect(DB_HOST, DB_USER, DB_PASS) or die("Failed to connect to the database:".mysqli_error($con));
+// Create connection
+$conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
 
-$db = mysqli_select_db($con, DB_NAME) or die("Failed to connect to the database:".mysqli_error($con));
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
 
-$user = $_POST['uname'];
-$pass = $_POST['psw'];
+$sql1 = "SELECT * FROM officers WHERE user_id='$username' AND pass = '$password'";
+$result = $conn->query($sql1);
+if ($result->num_rows > 0) {
+	header('Location: officers.html'); 
+} 
+else {
+   	$sql2 = "SELECT * FROM offenders WHERE aadhar='$username' AND contact = '$password'";
+	$result2 = $conn->query($sql2);
+	if ($result2->num_rows > 0) {
+		header('Location: offenders.html'); 
+	} else {
+		header('Location: login_error.html'); 
+	}
+}
 
-echo $user;
-echo $pass;
 
-// window.location.replace("student_logged_in/index.html")
+$conn->close();
+
 ?>
