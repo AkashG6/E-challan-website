@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 08, 2018 at 10:50 PM
+-- Generation Time: Apr 09, 2018 at 06:50 PM
 -- Server version: 10.1.28-MariaDB
 -- PHP Version: 7.1.11
 
@@ -56,12 +56,12 @@ INSERT INTO `license_holder` (`id`, `name`, `license_no`, `age`, `contact`, `dat
 CREATE TABLE `offenders` (
   `id` int(6) NOT NULL,
   `aadhar` int(16) NOT NULL,
-  `name` varchar(25) NOT NULL,
   `age` int(3) NOT NULL,
   `contact` bigint(10) NOT NULL,
-  `offense_id` int(10) NOT NULL,
+  `challan_id` int(10) NOT NULL,
   `license_no` varchar(15) NOT NULL,
   `vehicle_no` varchar(15) NOT NULL,
+  `offense` varchar(100) NOT NULL,
   `offense_location` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -69,8 +69,9 @@ CREATE TABLE `offenders` (
 -- Dumping data for table `offenders`
 --
 
-INSERT INTO `offenders` (`id`, `aadhar`, `name`, `age`, `contact`, `offense_id`, `license_no`, `vehicle_no`, `offense_location`) VALUES
-(1, 12345, 'mayank', 21, 12345, 123, 'MH031255', 'mho34544', 'chembur');
+INSERT INTO `offenders` (`id`, `aadhar`, `age`, `contact`, `challan_id`, `license_no`, `vehicle_no`, `offense`, `offense_location`) VALUES
+(1, 12345, 21, 12345, 123, 'MH031255', 'mho34544', 'asdasfagwte ', 'chembur'),
+(4, 123, 123, 123, 12589, '123', '123', '35 ghmxfgjmfrtu', '123');
 
 -- --------------------------------------------------------
 
@@ -151,10 +152,18 @@ INSERT INTO `traffic_posts` (`id`, `post_name`, `division`, `incharge_id`) VALUE
 CREATE TABLE `transactions` (
   `id` int(11) NOT NULL,
   `challan_id` int(11) NOT NULL,
+  `issued_by` int(11) NOT NULL,
   `amount` int(11) NOT NULL,
   `license_no` varchar(15) NOT NULL,
   `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`id`, `challan_id`, `issued_by`, `amount`, `license_no`, `status`) VALUES
+(1, 12589, 235467, 100, '123', 1);
 
 -- --------------------------------------------------------
 
@@ -233,19 +242,19 @@ ALTER TABLE `vehicles`
 -- AUTO_INCREMENT for table `license_holder`
 --
 ALTER TABLE `license_holder`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `offenders`
 --
 ALTER TABLE `offenders`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `officers`
 --
 ALTER TABLE `officers`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `penalties`
@@ -263,13 +272,13 @@ ALTER TABLE `traffic_posts`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `vehicles`
 --
 ALTER TABLE `vehicles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
