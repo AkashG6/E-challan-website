@@ -17,8 +17,19 @@
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 
     <title>Echallan</title>
+
+   <!--  <style type="text/css">
+        .mark{
+            z-index: 2;
+            position: absolute;
+            float: right;
+        }
+    </style> -->
+
+
 </head>
 
 <body>
@@ -47,12 +58,196 @@
     </div>
 </nav>
 
+<div class="row" id="row">
+    
+<div class="card col-md-3" style="width: 18rem;margin: 40px; margin-left: 60px">
+  <img class="card-img-top" src="assets/profile.png" alt="Card image cap" width="60%">
+  <div class="card-body">
+    <h5 class="card-title" id="name">Name</h5>
+    <p class="card-text">Aadhar no:
+        <span id="aadhar">
+        </span>
+    </p>
+    <p class="card-text">Age :
+    <span id="age">
+    </span>
+    </p>
+    <p class="card-text">License No. :
+    <span id="lno">
+    </span>
+    </p>
+  </div>
+</div>
 
+<div class="col-md-5" id="cardc" style="margin: 40px; margin-left: 00px; width: 550px">
+    
+</div>
 
+    <img src="assets/exclamation.png" id="emark" width="8%" height="8%" style="margin: 70px; margin-top: 100px">
 
+</div>
 
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Pay Challan Though E Payment</h4>
+      </div>
+      <div class="modal-body">
+        <p>Scan the QR code to make the payment.</p>
+        <center>
+            <img src="assets/qr.png">
+        </center>
+        <p>You can collect your license from your RTO after the payment is done</p>
+      </div>
+      <button type="button" class="btn btn-secondary" onclick="payment_done()" data-dismiss="modal">Done</button>
+
+    </div>
+
+  </div>
+</div>
 
 
 </body>
+
+<script type="text/javascript">
+    var challan_id
+    $('#tmark').hide()
+    $('#emark').hide()
+
+    var user = localStorage.getItem('user')
+    console.log(user)
+
+    $.ajax({
+            url: 'get_offender_data.php',
+            type: 'POST',
+            data: { user: user },
+            error: (function(data){
+                console.log(data);
+                }),
+            success: (function(data){
+                })
+        }).done(function(response){
+            // console.log("in auto_fill done")
+            var data = JSON.parse(response);
+            console.log(data)
+            challan_id = data[0].challan_id;
+
+            $('#aadhar').text(data[0].aadhar);
+            $('#age').text(data[0].age);
+            $('#lno').text(data[0].license_no);
+            var offense = data[0].offense;
+
+                    $.ajax({
+                        url: 'get_transaction_data.php',
+                        type: 'POST',
+                        data: { challan_id: challan_id },
+                        error: (function(data){
+                            console.log(data);
+                            }),
+                        success: (function(data){
+                            })
+                    }).done(function(response){
+
+                        if (response=="success") {
+                            console.log("no pending ")
+                            no_pending();
+                           
+                        }
+                        else
+                        {
+                            var data = JSON.parse(response);
+                            console.log(data)
+                            $('#emark').show()
+                            $('#cardc').empty()
+                            $('#cardc').append(
+                                `<div class="card">
+                              <div class="card-header">
+                                    <strong>
+                                        Challan ID:
+                                    </strong>  
+                                <span id="challan_id">
+                                    asda
+                                </span>
+                                </div>
+                              <div class="card-body">
+                                <p>
+                                    <strong>
+                                        Offense:<br>
+                                    </strong>
+                                <span id="offense">
+                                    asda
+                                </span>
+                                </p>
+                                <p>
+                                    <strong>
+                                        Fine:<br>
+                                    </strong>
+                                <span id="fine">
+                                    asda
+                                </span>
+                                </p>
+                              </div> 
+                              <div class="card-footer">
+                                <button class="btn btn-primary" style="float: right;" data-toggle="modal" data-target="#myModal">Pay Now</button>
+                              </div>
+                            </div>`
+                            )
+                        }
+
+                        $('#challan_id').text(data[0].challan_id);
+                        $('#fine').text(data[0].amount);
+                        $('#offense').text(offense);
+
+                    });  
+
+        });   
+
+
+        function payment_done()
+        {
+             $.ajax({
+                url: 'payment_done.php',
+                type: 'POST',
+                data: { challan_id: challan_id },
+                error: (function(data){
+                    console.log(data);
+                    }),
+                success: (function(data){
+                    })
+            }).done(function(response){
+                console.log(response)
+            });   
+
+            console.log("in payment done")
+            $('#cardc').empty()
+            $('#emark').hide()
+            no_pending()
+
+        }
+
+        function no_pending()
+        {
+            $('#tmark').show()
+            $('#cardc').append(
+                `<div class="card">
+              <div class="card-header">
+                  <center><img src="assets/tick.png"></center>
+                </div>
+              <div class="card-body">
+                <p><center>
+                <span>
+                    You do not have any pending payments.
+                </span></center>
+                </p>
+              </div>`
+                )
+        }
+
+</script>
+
 
 </html>

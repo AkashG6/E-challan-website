@@ -27,7 +27,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$sql1 = "INSERT INTO offenders (aadhar,age,contact,challan_id,license_no,vehicle_no,offense_location) VALUES ('$aadhar',$age,$contact,$challan_id,$lno,$vno,$loc)";
+$sql1 = "INSERT INTO offenders (aadhar,age,contact,challan_id,license_no,vehicle_no,offense,offense_location) VALUES ('$aadhar',$age,$contact,$challan_id,$lno,$vno,$offense,$loc)";
 $result = $conn->query($sql1);
 
 
