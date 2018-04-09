@@ -49,6 +49,10 @@
             /* padding-top: 2%; */
         }
 
+        label{
+            font-weight: bold;
+        }
+
        
 
 
@@ -83,64 +87,77 @@
         </nav>
 <center>
     <br><br>
+<h2>Create Challan</h2>
+    <br>
+
 <div class="center">
-    
+
 <div class="col-md-5 border rounded border-primary text-left login-form">
-        <form >
-                <label for="name">Name of police officer</label>
-                <input type="text" id="name" class="form-control" placeholder="Enter name">
-                <br>
+        <form action="submit_offence.php" method="POST">
+            <label for="name">Name of police officer</label>
+            <input type="text" id="name" name="name" class="form-control"  readonly='readonly'>
+            <br>
 
-                 <label for="id">User ID</label>
-                <input type="" id="user_id" class="form-control" placeholder="Enter user ID">
-                <br>
+             <label for="id">User ID</label>
+            <input type="" id="user_id" name="user_id" class="form-control"  readonly='readonly'>
+            <br>
 
-                 <label for="exampleInputEmail1">Division assigned</label>
-                <input type="text" id="division" class="form-control" placeholder="Enter Division">
-                <br>
+             <label for="exampleInputEmail1">Division assigned</label>
+            <input type="text" id="division" name="division" class="form-control"  readonly='readonly'>
+            <br>
 
-                <label for="ID">Aadhar no of the offender</label>
-                <input type="text" class="form-control" placeholder="Enter Aadhar no" required="">
-                <br>
+            <label for="ID">Challan ID</label>
+            <input type="text" id="challan_id" name="challan_id" class="form-control"  readonly='readonly'>
+            <br>
 
-                <label for="ID">Contact no of the offender</label>
-                <input type="text" class="form-control" placeholder="Enter Contact no" required="">
-                <br>
+            <label for="ID">Aadhar no of the offender</label>
+            <input type="text" class="form-control" name="aadhar" placeholder="Enter Aadhar no" required="">
+            <br>
 
-                <label for="name">Offence committed</label>
-                <br>
-                <select id="select">
-               
-                 </select>
-                
-                <br>
-                <br>
+            <label for="ID">Contact no of the offender</label>
+            <input type="text" class="form-control" name="contact" placeholder="Enter Contact no" required="">
+            <br>
 
-                <label for="exampleInputEmail1">License Number of vehicle</label>
-                <input type="" class="form-control" " placeholder="License Number">
-                <br>
+            <label for="ID">Age of the offender</label>
+            <input type="text" class="form-control" name="age" placeholder="Enter age" required="">
+            <br>
 
-                <label for="exampleInputEmail1">Vehicle Number of vehicle</label>
-                <input type="" class="form-control" " placeholder="Vehicle Number">
-                <br>
+            <label for="name">Offence committed</label>
+            <br>
+            <select id="select" required="" name="offense">
+                <option selected="selected">Select Offense</option>
+             </select>
+            
+            <br>
+            <br>
 
-                 <label for="name">Where was the offence comiited</label>
-                <input type="text" class="form-control" placeholder="Enter location">
-                <br>
+            <label for="exampleInputEmail1">License Number of vehicle</label>
+            <input type="" class="form-control" name="lno" placeholder="License Number" required="">
+            <br>
 
-                <label for="exampleInputEmail1">Fine charged</label>
-                <input type="" class="form-control" " placeholder="Enter amount">
-                <br>
+            <label for="exampleInputEmail1">Vehicle Number of vehicle</label>
+            <input type="" class="form-control" name="vno" placeholder="Vehicle Number" required="">
+            <br>
+
+             <label for="name">Where was the offence comiited</label>
+            <input type="text" class="form-control" name="loc" placeholder="Enter location" required="">
+            <br>
+
+            <label for="exampleInputEmail1">Fine charged</label>
+            <input type="" id="fine" class="form-control" name="fine" placeholder="Amount" readonly='readonly'>
+            <br>
 
             <button type="submit" class="button">Submit</button>
         </form>
     </div>
 </div>
-
+<br><br>
+<br><br>
 </center>    
 
 <script type="text/javascript">
     var user = localStorage.getItem('user')
+    var penalties;
        $.ajax({
             url: 'auto_fill.php',
             type: 'POST',
@@ -151,9 +168,9 @@
             success: (function(data){
                 })
         }).done(function(response){
-            console.log("in auto_fill done")
+            // console.log("in auto_fill done")
             var data = JSON.parse(response);
-            console.log(data)
+            // console.log(data)
 
             $('#name').val(data[0].name);
             $('#user_id').val(data[0].user_id);
@@ -170,17 +187,38 @@
                 console.log(data);
                 }),
             success: (function(data){
-                console.log(data);
+                // console.log(data);
                 })
         }).done(function(response){
-            console.log("in done")
+            // console.log("in done")
             var data = JSON.parse(response);
             console.log(data.length)
+            penalties = data;
 
             for(i=0;i<data.length;i++){
-                $('#select').append('<option value="license">'+data[i].penalty+'</option>')
+                $('#select').append('<option>'+data[i].penalty+'</option>')
             }
         });  
+
+    $('#select').on('change', function() {
+
+      var value = $('#select').val();
+      var fine;
+      // console.log(penalties)
+      for (var i = 0; i < penalties.length; i++) {
+          if (penalties[i].penalty==value) 
+          {
+            fine = penalties[i].fine;
+            $("#fine").val(fine)
+            // console.log(fine)
+          }
+      }
+
+    }); 
+
+    $('#challan_id').val( Math.floor(100000 + Math.random() * 900000))
+   
+
 
 </script>
 
